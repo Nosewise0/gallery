@@ -1,6 +1,35 @@
+import { useEffect, useRef } from 'react';
 import InfiniteGallery from "@/components/ui/3d-gallery-photography";
 
 export default function GalleryDemo() {
+	const audioRef = useRef<HTMLAudioElement>(null);
+
+	useEffect(() => {
+		const handleUserInteraction = () => {
+			if (audioRef.current) {
+				audioRef.current.play().catch((error) => {
+					console.log('Audio autoplay prevented:', error);
+				});
+			}
+			document.removeEventListener('click', handleUserInteraction);
+			document.removeEventListener('wheel', handleUserInteraction);
+			document.removeEventListener('keydown', handleUserInteraction);
+			document.removeEventListener('touchstart', handleUserInteraction);
+		};
+
+		document.addEventListener('click', handleUserInteraction);
+		document.addEventListener('wheel', handleUserInteraction);
+		document.addEventListener('keydown', handleUserInteraction);
+		document.addEventListener('touchstart', handleUserInteraction);
+
+		return () => {
+			document.removeEventListener('click', handleUserInteraction);
+			document.removeEventListener('wheel', handleUserInteraction);
+			document.removeEventListener('keydown', handleUserInteraction);
+			document.removeEventListener('touchstart', handleUserInteraction);
+		};
+	}, []);
+
 	const sampleImages = [
 		{ src: '/1.jpg', alt: 'Portrait 1' },
 		{ src: '/2.jpg', alt: 'Portrait 2' },
@@ -15,6 +44,12 @@ export default function GalleryDemo() {
 
 	return (
 		<main className="min-h-screen h-full w-full">
+			<audio
+				ref={audioRef}
+				src="/music.mp3"
+				loop
+				volume={0.5}
+			/>
 			<InfiniteGallery
 				images={sampleImages}
 				speed={1.2}
