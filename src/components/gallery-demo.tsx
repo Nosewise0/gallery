@@ -7,6 +7,7 @@ export default function GalleryDemo() {
 	useEffect(() => {
 		const handleUserInteraction = () => {
 			if (audioRef.current) {
+				audioRef.current.volume = 0.5;
 				audioRef.current.play().catch((error) => {
 					console.log('Audio autoplay prevented:', error);
 				});
@@ -48,7 +49,6 @@ export default function GalleryDemo() {
 				ref={audioRef}
 				src="/music.mp3"
 				loop
-				volume={0.5}
 			/>
 			<InfiniteGallery
 				images={sampleImages}
